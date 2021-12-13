@@ -5,6 +5,11 @@ var secretNumber = Math.trunc(Math.random() * 20) + 1;
 // Counter for gueses
 var counter = 20;
 
+//const for message
+const displayMessage = function (message) {
+  document.querySelector('.message').textContent = message;
+};
+
 // event listener for clicking on guess button
 document
   .querySelector('.check')
@@ -15,15 +20,19 @@ document
 
     // If counter is at 1, you lost the game
     if (counter < 1) {
-      document.querySelector('.message').textContent = 'You Lost the Game';
+      displayMessage('You Lost the Game');
     } else {
       // if there isn't a number enter print no number
       if (!guess) {
-        document.querySelector('.message').textContent = 'No Number';
+        displayMessage('Guess a Number');
+        counter++;
+      } else if (guess > 20) {
+        displayMessage('Number needs to be between 1 - 20');
+        counter++;
       }
       // if the guess is correct, change color, change text.
       else if (guess === secretNumber) {
-        document.querySelector('.message').textContent = 'Correct!';
+        displayMessage('Correct!');
         document.querySelector('body').style.backgroundColor = 'green';
         document.querySelector('.number').textContent = secretNumber;
         // if the counter is a new highscore update it.
@@ -32,24 +41,13 @@ document
           document.querySelector('.highscore').textContent = counter;
         }
 
-        // if the guess is less than secret number pring too low.
+        // if the guess is less than secret number pring too low or too high.
       } else if (guess < secretNumber) {
-        // added logic so you can see the difference in guesses
-        if (document.querySelector('.message').textContent === 'Too Low') {
-          document.querySelector('.message').textContent = 'Still Too Low';
-        } else document.querySelector('.message').textContent = 'Too Low';
-        counter--;
-      }
-      // if the guess is higher than secret number print too high
-      else if (guess > secretNumber) {
-        // added logic so you can see the difference in guess.
-        if (document.querySelector('.message').textContent === 'Too high') {
-          document.querySelector('.message').textContent = 'Still Too high';
-        } else document.querySelector('.message').textContent = 'Too high';
-        counter--;
-      }
-      document.querySelector('.score').textContent = counter;
+        displayMessage('Too Low');
+      } else displayMessage('Too high');
+      counter--;
     }
+    document.querySelector('.score').textContent = counter;
   });
 
 // Logic to reset game.
